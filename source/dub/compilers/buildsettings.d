@@ -7,6 +7,7 @@
 */
 module dub.compilers.buildsettings;
 
+import dub.internal.vibecompat.core.log;
 import dub.internal.vibecompat.inet.path;
 
 import std.array : array;
@@ -27,7 +28,17 @@ struct BuildSettings {
 	string workingDirectory;
 	string mainSourceFile;
 	string[] dflags;
-	string[] lflags;
+	string[] lflags_;
+
+	import std.conv:text;
+	void lflags(string file=__FILE__, int line=__LINE__)(string[]lflags_){
+		timlog(text(lflags_), file, line);
+		this.lflags_=lflags_;
+	}
+	ref inout(string[]) lflags(string file=__FILE__, int line=__LINE__)() inout {
+		timlog(text(lflags_), file, line);
+		return lflags_;
+	}
 	string[] libs;
 	string[] linkerFiles;
 	string[] sourceFiles;

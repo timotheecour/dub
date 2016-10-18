@@ -36,18 +36,25 @@ LogLevel getLogLevel()
 		level = The log level for the logged message
 		fmt = See http://dlang.org/phobos/std_format.html#format-string
 */
-void logDebug(T...)(string fmt, lazy T args) nothrow { log(LogLevel.debug_, fmt, args); }
+void logDebug(string file=__FILE__, int line=__LINE__, T...)(string fmt, lazy T args) nothrow { log2(file, line, LogLevel.debug_, fmt, args); }
 /// ditto
-void logDiagnostic(T...)(string fmt, lazy T args) nothrow { log(LogLevel.diagnostic, fmt, args); }
+void logDiagnostic(string file=__FILE__, int line=__LINE__, T...)(string fmt, lazy T args) nothrow { log2(file, line, LogLevel.diagnostic, fmt, args); }
 /// ditto
-void logInfo(T...)(string fmt, lazy T args) nothrow { log(LogLevel.info, fmt, args); }
+void logInfo(string file=__FILE__, int line=__LINE__, T...)(string fmt, lazy T args) nothrow { log2(file, line, LogLevel.info, fmt, args); }
 /// ditto
-void logWarn(T...)(string fmt, lazy T args) nothrow { log(LogLevel.warn, fmt, args); }
+void logWarn(string file=__FILE__, int line=__LINE__, T...)(string fmt, lazy T args) nothrow { log2(file, line, LogLevel.warn, fmt, args); }
 /// ditto
-void logError(T...)(string fmt, lazy T args) nothrow { log(LogLevel.error, fmt, args); }
+void logError(string file=__FILE__, int line=__LINE__, T...)(string fmt, lazy T args) nothrow { log2(file, line, LogLevel.error, fmt, args); }
+
+void timlog(string a, string file=__FILE__, int line=__LINE__) nothrow { log2(file, line, LogLevel.warn, "%s", a); }
 
 /// ditto
-void log(T...)(LogLevel level, string fmt, lazy T args)
+version(none)
+void log(T...)(LogLevel level, string fmt, lazy T args){
+	log2(null, 0, level, fmt, args);
+}
+
+void log2(T...)(string file, int line, LogLevel level, string fmt, lazy T args)
 nothrow {
 	if( level < s_minLevel ) return;
 	string pref;
@@ -64,6 +71,9 @@ nothrow {
 	try {
 		auto txt = appender!string();
 		txt.reserve(256);
+		import std.conv;
+		if(file)
+			txt~=text(file, ":", line," ");
 		formattedWrite(txt, fmt, args);
 
 		auto threadid = cast(ulong)cast(void*)Thread.getThis();
