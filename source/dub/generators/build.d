@@ -462,7 +462,11 @@ class BuildGenerator : ProjectGenerator {
 			      on the other compilers. Later this should be integrated somehow in the build process
 			      (either in the dub.json, or using a command line flag)
 		*/
-		} else if (settings.buildMode == BuildMode.allAtOnce || settings.platform.compilerBinary != "dmd" || !generate_binary || is_static_library) {
+		} else if (!generate_binary || is_static_library) {
+		//} else if (settings.buildMode == BuildMode.allAtOnce || settings.platform.compilerBinary != "dmd" || !generate_binary || is_static_library) {
+			
+			//assert(0, text(settings.buildMode, " ", settings.platform.compilerBinary, " ", generate_binary, " ", is_static_library));
+
 			// setup for command line
 			if (generate_binary) settings.compiler.setTarget(buildsettings, settings.platform);
 			settings.compiler.prepareBuildSettings(buildsettings, BuildSetting.commandLine);
@@ -473,6 +477,8 @@ class BuildGenerator : ProjectGenerator {
 			// invoke the compiler
 			settings.compiler.invoke(buildsettings, settings.platform, settings.compileCallback);
 		} else {
+			//timlog("separate linking: D20161018T125916");
+
 			// determine path for the temporary object file
 			string tempobjname = buildsettings.targetName ~ objSuffix;
 			Path tempobj = Path(buildsettings.targetPath) ~ tempobjname;

@@ -28,8 +28,11 @@ struct BuildSettings {
 	string workingDirectory;
 	string mainSourceFile;
 	string[] dflags;
-	string[] lflags_;
 
+	string[] lflags;
+
+	version(none){
+	string[] lflags_;
 	import std.conv:text;
 	void lflags(string file=__FILE__, int line=__LINE__)(string[]lflags_){
 		timlog(text(lflags_), file, line);
@@ -39,6 +42,8 @@ struct BuildSettings {
 		timlog(text(lflags_), file, line);
 		return lflags_;
 	}
+	}
+
 	string[] libs;
 	string[] linkerFiles;
 	string[] sourceFiles;

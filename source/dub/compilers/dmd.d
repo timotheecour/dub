@@ -135,11 +135,12 @@ class DMDCompiler : Compiler {
 		}
 
 		if (!(fields & BuildSetting.lflags)) {
-			//settings.addDFlags(lflagsToDFlags(settings.lflags));
-			//settings.lflags = null;
+			settings.addDFlags(lflagsToDFlags(settings.lflags));
+			settings.lflags = null;
 		}
 
 		version (Posix) {
+			// TODO: option
 			//if (settings.targetType == TargetType.dynamicLibrary)
 				settings.addDFlags("-fPIC");
 		}
@@ -226,14 +227,16 @@ class DMDCompiler : Compiler {
 
 		logDiagnostic("%s %s", platform.compilerBinary, escapeArgs(args).join(" "));
 
-		auto msg=text(settings);
-		logDiagnostic("%s", msg);
+		//auto msg=text(settings);
+		//logDiagnostic("%s", msg);
 
 		//import std.file:copy, exists;
 		//string file="/home/timothee/temp/z01.rsp";
 		//assert(!file.exists, file);
 		//res_file.toNativeString.copy(file);
 
+		//assert(0);
+		
 		invokeTool([platform.compilerBinary, "@"~res_file.toNativeString()], output_callback);
 	}
 
