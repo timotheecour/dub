@@ -353,7 +353,7 @@ class BuildGenerator : ProjectGenerator {
 	{
 		auto filename = settings.compiler.getTargetFileName(buildsettings, settings.platform);
 		auto src = build_path ~ filename;
-		logDiagnostic("Copying target from %s to %s", src.toNativeString(), buildsettings.targetPath);
+		logDiagnostic("Copying target from %s to %s (%s)", src.toNativeString(), buildsettings.targetPath, filename);
 		if (!existsFile(Path(buildsettings.targetPath)))
 			mkdirRecurse(buildsettings.targetPath);
 		hardLinkFile(src, Path(buildsettings.targetPath) ~ filename, true);

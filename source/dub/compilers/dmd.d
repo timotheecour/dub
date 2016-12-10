@@ -140,7 +140,7 @@ class DMDCompiler : Compiler {
 		}
 
 		version (Posix) {
-			// TODO: option
+			// TODO: make it option to always emit; it's necessary in some cases to build shared libs; D20161018T210254:here
 			//if (settings.targetType == TargetType.dynamicLibrary)
 				settings.addDFlags("-fPIC");
 		}
